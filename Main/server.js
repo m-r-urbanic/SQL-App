@@ -28,7 +28,39 @@ inquirer
         },
     ])
 
-
+// Create a department
+app.post('/api/new-department', ({ body }, res) => {
+    const sql = `INSERT INTO department (name)
+      VALUES (?)`;
+    const params = [body.name];
+    
+    db.query(sql, params, (err, result) => {
+      if (err) {
+        res.status(400).json({ error: err.message });
+        return;
+      }
+      res.json({
+        message: 'success',
+        data: body
+      });
+    });
+  });
+  
+  // Read all departments
+  app.get('/api/departments', (req, res) => {
+    const sql = `SELECT id, name AS department FROM department`;
+    
+    db.query(sql, (err, rows) => {
+      if (err) {
+        res.status(500).json({ error: err.message });
+         return;
+      }
+      res.json({
+        message: 'success',
+        data: rows
+      });
+    });
+  });
 
 
 app.listen(PORT, () => {
