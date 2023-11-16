@@ -46,8 +46,8 @@ app.post('/api/new-department', ({ body }, res) => {
     });
   });
   
-  // Read all departments
-  app.get('/api/departments', (req, res) => {
+// Read all departments
+app.get('/api/departments', (req, res) => {
     const sql = `SELECT id, name AS department FROM department`;
     
     db.query(sql, (err, rows) => {
@@ -60,7 +60,43 @@ app.post('/api/new-department', ({ body }, res) => {
         data: rows
       });
     });
+});
+
+// Create a role
+app.post('/api/new-role', ({ body }, res) => {
+    const sql = `INSERT INTO department (title, salary, department_id)
+      VALUES (?)`;
+    const params = [body.title, body.salary, body.department_id];
+    
+    db.query(sql, params, (err, result) => {
+      if (err) {
+        res.status(400).json({ error: err.message });
+        return;
+      }
+      res.json({
+        message: 'success',
+        data: body
+      });
+    });
   });
+  
+// Read all roles
+app.get('/api/roles', (req, res) => {
+    const sql = `SELECT id, title, salary, department_id AS (SELECT name FROM department) FROM department`;
+    
+    db.query(sql, (err, rows) => {
+      if (err) {
+        res.status(500).json({ error: err.message });
+         return;
+      }
+      res.json({
+        message: 'success',
+        data: rows
+      });
+    });
+});
+
+
 
 
 app.listen(PORT, () => {
