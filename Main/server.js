@@ -18,6 +18,7 @@ const db = mysql.createConnection(
   console.log(`Connected to the department_db database.`)
 );
 
+// promts for the user to select
 inquirer
     .prompt([
         {
